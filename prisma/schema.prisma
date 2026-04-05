@@ -1,13 +1,106 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
+// https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+    provider = "prisma-client"
+    output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+    provider = "postgresql"
+}
+
+model User {
+    id         Int      @id @default(autoincrement())
+    username   String
+    password   String
+    salt       String
+    saltLoc    Int
+    isAdmin    Boolean  @default(false)
+    name       String?
+    bio        String?
+    avatar     String?
+    signature  String?
+    createdAt  DateTime @default(now())
+    lastLogin  DateTime
+
+    // Relations
+    sentMessages     Message[]   @relation("AuthorMessages")
+    receivedMessages Message[]   @relation("RecipientMessages")
+    threads          Thread[]
+    posts            Post[]
+    followers        Following[] @relation("Follower")
+    following        Following[] @relation("Following")
+    likes            Like[]
+    subscriptions    Subscription[]
+}
+
+model Message {
+    id           Int      @id @default(autoincrement())
+    authorId     Int
+    recipientId  Int
+    sentAt       DateTime @default(now())
+    body         String   @db.Text
+
+    // Relations
+    author    User @relation("AuthorMessages", fields: [authorId], references: [id])
+    recipient User @relation("RecipientMessages", fields: [recipientId], references: [id])
+}
+
+model Thread {
+    id       Int      @id @default(autoincrement())
+    authorId Int
+    createdAt DateTime @default(now())
+    title    String
+
+    // Relations
+    author User @relation(fields: [authorId], references: [id])
+    posts  Post[]
+    subscriptions Subscription[]
+}
+
+model Post {
+    id       Int      @id @default(autoincrement())
+    authorId Int
+    threadId Int
+    createdAt DateTime @default(now())
+    body     String   @db.Text
+
+    // Relations
+    author User   @relation(fields: [authorId], references: [id])
+    thread Thread @relation(fields: [threadId], references: [id])
+    likes  Like[]
+}
+
+model Following {
+    followerId  Int
+    followingId Int
+
+    // Relations
+    follower User @relation("Follower", fields: [followerId], references: [id])
+    following User @relation("Following", fields: [followingId], references: [id])
+
+    @@id([followerId, followingId])
+}
+
+model Like {
+    userId   Int
+    postId   Int
+    value    Int  // 1 = like, -1 = dislike, 0 = neutral
+
+    // Relations
+    user User @relation(fields: [userId], references: [id])
+    post Post @relation(fields: [postId], references: [id])
+
+    @@id([userId, postId])
+}
+
+model Subscription {
+    userId   Int
+    threadId Int
+
+    // Relations
+    user   User   @relation(fields: [userId], references: [id])
+    thread Thread @relation(fields: [threadId], references: [id])
+
+    @@id([userId, threadId])
 }
