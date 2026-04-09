@@ -1,33 +1,96 @@
-import { prisma } from "@/lib/prisma";
+import { query } from "@/lib/db";
 import { PostForm } from "@/components/PostForm";
 import { LikeButton } from "@/components/LikeButton";
 import { notFound } from "next/navigation";
+import { getCurrentUser } from "@/lib/auth";
+import type { ThreadWithAuthor, PostWithDetails } from "@/types/database";
 
-export default async function ThreadPage({ params }: { params: { id: string } }) {
-    const thread = await prisma.thread.findUnique({
-        where: { thread_id: parseInt(params.id) },
-            include: {
-                author: true,
-                posts: {
-                    include: { author: true, likes: true },
-                orderBy: { date: "asc" }
-            }
-        }
-    });
+interface PageProps {
+    params: {
+        id: string;
+    };
+}
 
-    if (!thread) notFound();
+export default async function ThreadPage({ params }: PageProps) {
+    const threadId = parseInt(params.id);
+    const user = await getCurrentUser();
+
+    // Fetch thread
+    const threadResult = await query(
+        `SELECT t.*, u.username
+        FROM threads t
+        JOIN users u ON t.author_id = u.user_id
+        WHERE t.thread_id = $1`,
+        [threadId]
+    );
+
+    if (threadResult.rows.length === 0) {
+        notFound();
+    }
+
+    const thread = threadResult.rows[0] as ThreadWithAuthor;
+
+    // Fetch posts
+    const postsResult = await query(
+        `SELECT
+        p.*,
+        u.username,
+        COUNT(CASE WHEN l.like_dislike = 1 THEN 1 END) as like_count,
+                                    COUNT(CASE WHEN l.like_dislike = -1 THEN 1 END) as dislike_count,
+                                    MAX(CASE WHEN l.user_id = $2 THEN l.like_dislike END) as user_like
+                                    FROM posts p
+                                    JOIN users u ON p.author_id = u.user_id
+                                    LEFT JOIN likes l ON p.post_id = l.post_id
+                                    WHERE p.thread_id = $1
+                                    GROUP BY p.post_id, u.username
+                                    ORDER BY p.date ASC`,
+                                    [threadId, user?.user_id || null]
+    );
+
+    const posts = postsResult.rows as PostWithDetails[];
 
     return (
         <div>
-            <h1>{thread.title}</h1>
-            {thread.posts.map((post) => (
-                <div key={post.post_id}>
-                <p>{post.author.username}</p>
-                <p>{post.body}</p>
-                <LikeButton postId={post.post_id} initialLikes={post.likes} />
-                </div>
+        {/* Same JSX as above, but with typed variables */}
+        <div className="thread-header">
+        <h1>{thread.title}</h1>
+        <div className="thread-meta">
+        Started by {thread.username} on {new Date(thread.date).toLocaleDateString()}
+        </div>
+        </div>
+
+        <div className="posts-list">
+        {posts.map((post) => (
+            <div key={post.post_id} className="post-item">
+            <div className="post-header">
+            <div className="post-author">{post.username}</div>
+            <div className="post-date">
+            {new Date(post.date).toLocaleString()}
+            </div>
+            </div>
+
+            <div className="post-body">
+            {post.body.split('\n').map((line, i) => (
+                <p key={i}>{line}</p>
             ))}
-            <PostForm threadId={thread.thread_id} />
+            </div>
+
+            <div className="post-footer">
+            <LikeButton
+            postId={post.post_id}
+            initialLikes={parseInt(post.like_count)}
+            initialDislikes={parseInt(post.dislike_count)}
+            initialUserLike={post.user_like}
+            />
+            </div>
+            </div>
+        ))}
+        </div>
+
+        <div className="reply-section">
+        <h2>Post a Reply</h2>
+        <PostForm threadId={threadId} />
+        </div>
         </div>
     );
 }

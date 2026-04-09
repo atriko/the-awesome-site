@@ -1,0 +1,104 @@
+// src/app/globals.scss
+.forum-layout {
+    display: flex;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.forum-content {
+    flex: 3;
+    min-width: 0; /* Prevents flex overflow */
+}
+
+.forum-sidebar {
+    flex: 1;
+    position: sticky;
+    top: 1rem;
+    align-self: start;
+}
+
+.sidebar-section {
+    background: #f5f5f5;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.sidebar-section h3 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.sidebar-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-section li {
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-section a {
+    text-decoration: none;
+    color: #0066cc;
+}
+
+.sidebar-section a:hover {
+    text-decoration: underline;
+}
+
+.thread-author {
+    display: block;
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 0.2rem;
+}
+
+.like-button-container {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.like-button,
+.dislike-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 0.25rem;
+    background: white;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+
+    &:hover {
+        background: #f5f5f5;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    &.active {
+        background: #e8f0fe;
+        border-color: #0066cc;
+    }
+
+    .count {
+        font-size: 0.75rem;
+        color: #666;
+    }
+}
+
+.pending-indicator {
+    font-size: 0.75rem;
+    color: #999;
+}
