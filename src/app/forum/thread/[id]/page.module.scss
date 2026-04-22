@@ -1,0 +1,216 @@
+// src/app/forum/thread/[id]/page.module.scss
+
+/* Thread Header */
+.threadHeader {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--color-primary);
+}
+
+.threadTitle {
+    margin: 0 0 0.75rem 0;
+    font-size: 1.75rem;
+    color: var(--text-primary);
+}
+
+.threadMeta {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    flex-wrap: wrap;
+}
+
+/* Posts List */
+.postsList {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Individual Post */
+.postItem {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    transition: all 0.2s ease;
+
+    &:hover {
+        border-color: var(--color-primary);
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
+    }
+}
+
+.postHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.postAuthor {
+    font-weight: bold;
+    color: var(--color-primary);
+    font-size: 1rem;
+}
+
+.postDate {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+}
+
+.postBody {
+    line-height: 1.6;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+
+    p {
+        margin: 0 0 1rem 0;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.postFooter {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+}
+
+/* Reply Section */
+.replySection {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--color-primary);
+
+    h2 {
+        margin-bottom: 1rem;
+        font-size: 1.25rem;
+        color: var(--text-primary);
+    }
+}
+
+/* Reply Form */
+.replyForm {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+}
+
+.formGroup {
+    margin-bottom: 1rem;
+
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--text-primary);
+    }
+
+    textarea {
+        width: 100%;
+        padding: 0.75rem;
+        background-color: var(--bg-tertiary);
+        border: 1px solid var(--border);
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        color: var(--text-primary);
+        resize: vertical;
+        font-family: inherit;
+
+        &:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+
+        &::placeholder {
+            color: var(--text-muted);
+        }
+    }
+}
+
+.submitButton {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+}
+
+/* Loading State */
+.loadingState {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-secondary);
+}
+
+/* Error State */
+.errorState {
+    text-align: center;
+    padding: 3rem;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--error);
+    border-radius: 0.75rem;
+    color: var(--error);
+
+    h2 {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .threadTitle {
+        font-size: 1.35rem;
+    }
+
+    .threadMeta {
+        gap: 0.75rem;
+        font-size: 0.75rem;
+    }
+
+    .postItem {
+        padding: 1rem;
+    }
+
+    .postHeader {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .replyForm {
+        padding: 1rem;
+    }
+
+    .submitButton {
+        width: 100%;
+    }
+}

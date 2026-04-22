@@ -2,12 +2,14 @@
 
 import { useState, useTransition } from "react";
 import { likePost, removeLike } from "@/actions/posts";
+import styles from "./LikeButton.module.scss";
 
 interface LikeButtonProps {
     postId: number;
     initialLikes: number;
     initialDislikes: number;
     initialUserLike: number | null; // 1 = like, -1 = dislike, null = no reaction
+    size?: "small" | "medium" | "large";
 }
 
 export function LikeButton({
@@ -15,6 +17,7 @@ export function LikeButton({
     initialLikes,
     initialDislikes,
     initialUserLike,
+    size = "medium",
 }: LikeButtonProps) {
     const [isPending, startTransition] = useTransition();
     const [likes, setLikes] = useState(initialLikes);
@@ -79,27 +82,38 @@ export function LikeButton({
         });
     };
 
+    const sizeClass =
+        size === "small" ? styles.small : size === "large" ? styles.large : "";
+
     return (
-        <div className="like-button-container">
-        <button
-        onClick={handleLike}
-        disabled={isPending}
-        className={`like-button ${userLike === 1 ? "active" : ""}`}
-        aria-label="Like"
-        >
-        👍 {likes > 0 && <span className="count">{likes}</span>}
-        </button>
+        <div className={`${styles.likeButtonContainer} ${sizeClass}`}>
+            <button
+                onClick={handleLike}
+                disabled={isPending}
+                className={`${styles.likeButton} ${userLike === 1 ? styles.active : ""}`}
+                aria-label="Like"
+            >
+                <span className={styles.icon}>👍</span>
+                {likes > 0 && <span className={styles.count}>{likes}</span>}
+                {isPending && userLike === 1 && (
+                    <span className={styles.pendingIndicator} />
+                )}
+            </button>
 
-        <button
-        onClick={handleDislike}
-        disabled={isPending}
-        className={`dislike-button ${userLike === -1 ? "active" : ""}`}
-        aria-label="Dislike"
-        >
-        👎 {dislikes > 0 && <span className="count">{dislikes}</span>}
-        </button>
-
-        {isPending && <span className="pending-indicator">...</span>}
+            <button
+                onClick={handleDislike}
+                disabled={isPending}
+                className={`${styles.dislikeButton} ${userLike === -1 ? styles.active : ""}`}
+                aria-label="Dislike"
+            >
+                <span className={styles.icon}>👎</span>
+                {dislikes > 0 && (
+                    <span className={styles.count}>{dislikes}</span>
+                )}
+                {isPending && userLike === -1 && (
+                    <span className={styles.pendingIndicator} />
+                )}
+            </button>
         </div>
     );
 }

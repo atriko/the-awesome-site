@@ -1,0 +1,117 @@
+// src/app/forum/page.module.scss
+.forumHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    h1 {
+        margin: 0;
+        font-size: 1.75rem;
+        color: var(--text-primary);
+    }
+}
+
+.newThreadButton {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+
+    &:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+        color: white;
+    }
+}
+
+.threadList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.threadCard {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    transition: all 0.2s ease;
+
+    &:hover {
+        border-color: var(--color-primary);
+        transform: translateX(4px);
+        box-shadow: 0 2px 8px rgba(139, 92, 246, 0.15);
+    }
+}
+
+.threadTitle {
+    margin: 0 0 0.5rem 0;
+
+    a {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        text-decoration: none;
+
+        &:hover {
+            color: var(--color-secondary);
+        }
+    }
+}
+
+.threadMeta {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.threadStats {
+    display: flex;
+    gap: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.emptyState {
+    text-align: center;
+    padding: 3rem;
+    background-color: var(--bg-secondary);
+    border-radius: 0.75rem;
+    border: 1px solid var(--border);
+
+    p {
+        margin-bottom: 1rem;
+        color: var(--text-secondary);
+    }
+}
+
+@media (max-width: 768px) {
+    .forumHeader {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .threadCard {
+        padding: 1rem;
+    }
+
+    .threadTitle a {
+        font-size: 1rem;
+    }
+
+    .threadMeta {
+        gap: 0.75rem;
+        font-size: 0.7rem;
+    }
+}

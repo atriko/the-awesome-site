@@ -1,104 +1,73 @@
-// src/app/globals.scss
-.forum-layout {
-    display: flex;
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 1rem;
+// src/app/globals.scss - Dark Theme with Purple & Orange
+
+:root {
+    // Primary colors
+    --color-primary: #8b5cf6;      // Purple
+    --color-primary-dark: #7c3aed;
+    --color-primary-light: #a78bfa;
+
+    // Secondary colors
+    --color-secondary: #f97316;     // Orange
+    --color-secondary-dark: #ea580c;
+    --color-secondary-light: #fb923c;
+
+    // Background colors
+    --bg-primary: #0f0f1a;          // Dark background
+    --bg-secondary: #1a1a2e;        // Card background
+    --bg-tertiary: #16213e;         // Hover states
+
+    // Text colors
+    --text-primary: #f3f4f6;        // White-ish
+    --text-secondary: #9ca3af;      // Gray
+    --text-muted: #6b7280;          // Darker gray
+
+    // Border colors
+    --border: #2d2d44;
+    --border-light: #3d3d5c;
+
+    // Status colors
+    --success: #10b981;
+    --error: #ef4444;
+    --warning: #f59e0b;
 }
 
-.forum-content {
-    flex: 3;
-    min-width: 0; /* Prevents flex overflow */
-}
-
-.forum-sidebar {
-    flex: 1;
-    position: sticky;
-    top: 1rem;
-    align-self: start;
-}
-
-.sidebar-section {
-    background: #f5f5f5;
-    border-radius: 0.5rem;
-    padding: 1rem;
-    margin-bottom: 1.5rem;
-}
-
-.sidebar-section h3 {
-    margin-top: 0;
-    margin-bottom: 0.75rem;
-    font-size: 1.1rem;
-    font-weight: 600;
-}
-
-.sidebar-section ul {
-    list-style: none;
-    padding: 0;
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.sidebar-section li {
-    margin-bottom: 0.5rem;
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-.sidebar-section a {
+body {
+    min-height: 100vh;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+}
+
+a {
+    color: var(--color-primary-light);
     text-decoration: none;
-    color: #0066cc;
-}
-
-.sidebar-section a:hover {
-    text-decoration: underline;
-}
-
-.thread-author {
-    display: block;
-    font-size: 0.8rem;
-    color: #666;
-    margin-top: 0.2rem;
-}
-
-.like-button-container {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-}
-
-.like-button,
-.dislike-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.25rem 0.5rem;
-    border: 1px solid #e0e0e0;
-    border-radius: 0.25rem;
-    background: white;
-    cursor: pointer;
-    font-size: 0.875rem;
-    transition: all 0.2s;
 
     &:hover {
-        background: #f5f5f5;
-    }
-
-    &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-    }
-
-    &.active {
-        background: #e8f0fe;
-        border-color: #0066cc;
-    }
-
-    .count {
-        font-size: 0.75rem;
-        color: #666;
+        color: var(--color-secondary);
     }
 }
 
-.pending-indicator {
-    font-size: 0.75rem;
-    color: #999;
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
 }
+
+// Utility classes
+.text-primary { color: var(--color-primary); }
+.text-secondary { color: var(--color-secondary); }
+.bg-primary { background-color: var(--bg-primary); }
+.bg-secondary { background-color: var(--bg-secondary); }

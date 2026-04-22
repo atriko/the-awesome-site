@@ -1,0 +1,85 @@
+// src/components/Header.module.scss
+.header {
+    background-color: var(--bg-secondary);
+    border-bottom: 2px solid var(--color-primary);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+}
+
+.logo a {
+    color: var(--color-primary);
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+
+    &:hover {
+        color: var(--color-secondary);
+    }
+}
+
+.nav {
+    display: flex;
+    gap: 1.5rem;
+
+    a {
+        color: var(--text-primary);
+        text-decoration: none;
+
+        &:hover {
+            color: var(--color-secondary);
+        }
+    }
+}
+
+.userSection {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: auto;
+}
+
+.username {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.logoutBtn {
+    background: none;
+    border: 1px solid var(--color-secondary);
+    color: var(--color-secondary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--color-secondary);
+        color: white;
+    }
+}
+
+.authLinks {
+    display: flex;
+    gap: 1rem;
+
+    a {
+        color: var(--text-primary);
+        text-decoration: none;
+
+        &:hover {
+            color: var(--color-secondary);
+        }
+    }
+}

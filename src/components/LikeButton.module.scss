@@ -1,0 +1,149 @@
+// src/components/LikeButton.module.scss
+
+/* Container */
+.likeButtonContainer {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+/* Base Button Styles */
+.likeButton,
+.dislikeButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 0.75rem;
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 2rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--text-secondary);
+
+    &:hover:not(:disabled) {
+        transform: translateY(-1px);
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+/* Like Button Specific */
+.likeButton {
+    &:hover:not(:disabled) {
+        background-color: rgba(139, 92, 246, 0.15);
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+
+    &.active {
+        background-color: rgba(139, 92, 246, 0.2);
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+
+        &:hover:not(:disabled) {
+            background-color: rgba(139, 92, 246, 0.3);
+        }
+    }
+}
+
+/* Dislike Button Specific */
+.dislikeButton {
+    &:hover:not(:disabled) {
+        background-color: rgba(249, 115, 22, 0.15);
+        border-color: var(--color-secondary);
+        color: var(--color-secondary);
+    }
+
+    &.active {
+        background-color: rgba(249, 115, 22, 0.2);
+        border-color: var(--color-secondary);
+        color: var(--color-secondary);
+
+        &:hover:not(:disabled) {
+            background-color: rgba(249, 115, 22, 0.3);
+        }
+    }
+}
+
+/* Icon Styles */
+.icon {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+/* Count Badge */
+.count {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: inherit;
+}
+
+/* Pending Indicator */
+.pendingIndicator {
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    margin-left: 0.25rem;
+    border: 2px solid var(--text-muted);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Loading State for Buttons */
+.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+/* Size Variants (Optional) */
+.small {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+
+    .icon {
+        font-size: 0.875rem;
+    }
+
+    .count {
+        font-size: 0.7rem;
+    }
+}
+
+.large {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+
+    .icon {
+        font-size: 1.125rem;
+    }
+
+    .count {
+        font-size: 0.875rem;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .likeButton,
+    .dislikeButton {
+        padding: 0.25rem 0.625rem;
+        font-size: 0.75rem;
+    }
+
+    .icon {
+        font-size: 0.875rem;
+    }
+}

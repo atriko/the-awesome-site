@@ -1,19 +1,34 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { loginAction } from "@/actions/auth";
+import { registerAction } from "@/actions/auth";
 import Link from "next/link";
-import styles from "./LoginForm.module.scss";
+import styles from "./RegisterForm.module.scss";
 
-export function LoginForm() {
+export function RegisterForm() {
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         username: "",
+        email: "",
+        name: "",
         password: "",
     });
     const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+
+    const getPasswordStrength = (password: string): number => {
+        let strength = 0;
+        if (password.length >= 6) strength++;
+        if (password.length >= 10) strength++;
+        if (/[A-Z]/.test(password)) strength++;
+        if (/[0-9]/.test(password)) strength++;
+        if (/[^A-Za-z0-9]/.test(password)) strength++;
+        return strength;
+    };
+
+    const passwordStrength = getPasswordStrength(formData.password);
+    const strengthLabels = ["Weak", "Fair", "Good", "Strong", "Very Strong"];
 
     const handleSubmit = async (formDataObj: FormData) => {
         setError(null);
@@ -21,13 +36,11 @@ export function LoginForm() {
 
         startTransition(async () => {
             try {
-                await loginAction(formDataObj);
+                await registerAction(formDataObj);
             } catch (err) {
                 const message = (err as Error).message;
-                if (message.toLowerCase().includes("username")) {
+                if (message.includes("username")) {
                     setFieldErrors({ username: message });
-                } else if (message.toLowerCase().includes("password")) {
-                    setFieldErrors({ password: message });
                 } else {
                     setError(message);
                 }
@@ -36,12 +49,12 @@ export function LoginForm() {
     };
 
     return (
-        <div className={styles.loginContainer}>
-            <div className={styles.loginCard}>
+        <div className={styles.registerContainer}>
+            <div className={styles.registerCard}>
                 <div className={styles.header}>
-                    <h1 className={styles.title}>Welcome Back</h1>
+                    <h1 className={styles.title}>Join Awesome Forum</h1>
                     <p className={styles.subtitle}>
-                        Login to your account to continue
+                        Create an account to join the discussion
                     </p>
                 </div>
 
@@ -65,10 +78,9 @@ export function LoginForm() {
                                         username: e.target.value,
                                     })
                                 }
-                                placeholder="Enter your username"
+                                placeholder="Choose a username"
                                 className={`${styles.input} ${fieldErrors.username ? styles.error : ""}`}
                                 disabled={isPending}
-                                autoComplete="username"
                             />
                         </div>
                         {fieldErrors.username && (
@@ -76,6 +88,58 @@ export function LoginForm() {
                                 {fieldErrors.username}
                             </div>
                         )}
+                    </div>
+
+                    {/* Email Field (Optional) */}
+                    <div className={styles.formGroup}>
+                        <label htmlFor="email" className={styles.label}>
+                            Email{" "}
+                            <span className={styles.optional}>(optional)</span>
+                        </label>
+                        <div className={styles.inputWrapper}>
+                            <span className={styles.inputIcon}>📧</span>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={(e) =>
+                                    setFormData({
+                                        ...formData,
+                                        email: e.target.value,
+                                    })
+                                }
+                                placeholder="your@email.com"
+                                className={styles.input}
+                                disabled={isPending}
+                            />
+                        </div>
+                    </div>
+
+                    {/* Name Field (Optional) */}
+                    <div className={styles.formGroup}>
+                        <label htmlFor="name" className={styles.label}>
+                            Display Name{" "}
+                            <span className={styles.optional}>(optional)</span>
+                        </label>
+                        <div className={styles.inputWrapper}>
+                            <span className={styles.inputIcon}>🏷️</span>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                value={formData.name}
+                                onChange={(e) =>
+                                    setFormData({
+                                        ...formData,
+                                        name: e.target.value,
+                                    })
+                                }
+                                placeholder="How you want to be seen"
+                                className={styles.input}
+                                disabled={isPending}
+                            />
+                        </div>
                     </div>
 
                     {/* Password Field */}
@@ -98,10 +162,9 @@ export function LoginForm() {
                                             password: e.target.value,
                                         })
                                     }
-                                    placeholder="Enter your password"
-                                    className={`${styles.input} ${fieldErrors.password ? styles.error : ""}`}
+                                    placeholder="Create a strong password"
+                                    className={styles.input}
                                     disabled={isPending}
-                                    autoComplete="current-password"
                                 />
                                 <button
                                     type="button"
@@ -114,9 +177,20 @@ export function LoginForm() {
                                 </button>
                             </div>
                         </div>
-                        {fieldErrors.password && (
-                            <div className={styles.fieldError}>
-                                {fieldErrors.password}
+
+                        {/* Password Strength Meter */}
+                        {formData.password && (
+                            <div className={styles.passwordStrength}>
+                                <div className={styles.strengthMeter}>
+                                    <div
+                                        className={`${styles.strengthBar} ${styles[`strength-${passwordStrength}`]}`}
+                                    />
+                                </div>
+                                <div
+                                    className={`${styles.strengthLabel} ${styles[`strength-${passwordStrength}`]}`}
+                                >
+                                    {strengthLabels[passwordStrength]}
+                                </div>
                             </div>
                         )}
                     </div>
@@ -130,13 +204,13 @@ export function LoginForm() {
                         className={styles.submitButton}
                         disabled={isPending}
                     >
-                        {isPending ? "Logging in..." : "Login"}
+                        {isPending ? "Creating account..." : "Register"}
                     </button>
                 </form>
 
-                <div className={styles.registerLink}>
-                    Don't have an account?{" "}
-                    <Link href="/register">Register here</Link>
+                <div className={styles.loginLink}>
+                    Already have an account?{" "}
+                    <Link href="/login">Login here</Link>
                 </div>
             </div>
         </div>

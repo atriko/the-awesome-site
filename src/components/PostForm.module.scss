@@ -1,0 +1,189 @@
+// src/components/PostForm.module.scss
+
+/* Container */
+.postForm {
+    width: 100%;
+}
+
+/* Form Group */
+.formGroup {
+    margin-bottom: 1rem;
+}
+
+.label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+/* Textarea */
+.textarea {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    color: var(--text-primary);
+    font-family: inherit;
+    resize: vertical;
+    transition: all 0.2s ease;
+
+    &:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+    }
+
+    &::placeholder {
+        color: var(--text-muted);
+    }
+}
+
+/* Character Counter */
+.charCounter {
+    text-align: right;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+
+    &.nearLimit {
+        color: var(--warning);
+    }
+
+    &.atLimit {
+        color: var(--error);
+    }
+}
+
+/* Form Actions */
+.formActions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Submit Button */
+.submitButton {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+        opacity: 0.9;
+        transform: translateY(-1px);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+}
+
+/* Cancel Button (optional) */
+.cancelButton {
+    background-color: transparent;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+        border-color: var(--color-secondary);
+        color: var(--color-secondary);
+    }
+}
+
+/* Error Message */
+.errorMessage {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    background-color: rgba(239, 68, 68, 0.1);
+    border: 1px solid var(--error);
+    border-radius: 0.5rem;
+    color: var(--error);
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+/* Success Message */
+.successMessage {
+    margin-top: 0.75rem;
+    padding: 0.75rem;
+    background-color: rgba(16, 185, 129, 0.1);
+    border: 1px solid var(--success);
+    border-radius: 0.5rem;
+    color: var(--success);
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+/* Preview Mode (if you add preview functionality) */
+.preview {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+
+    h4 {
+        margin: 0 0 0.5rem 0;
+        font-size: 0.875rem;
+        color: var(--text-secondary);
+    }
+
+    .previewContent {
+        color: var(--text-primary);
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+}
+
+/* Loading State Overlay */
+.loadingOverlay {
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 0.5rem;
+        pointer-events: none;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .formActions {
+        flex-direction: column;
+    }
+
+    .submitButton,
+    .cancelButton {
+        width: 100%;
+    }
+
+    .textarea {
+        font-size: 0.9rem;
+    }
+}

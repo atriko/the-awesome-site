@@ -29,14 +29,14 @@ export async function createPost(formData: FormData) {
     await query(
         `INSERT INTO posts (thread_id, author_id, body, date)
         VALUES ($1, $2, $3, CURRENT_TIMESTAMP)`,
-                [threadId, user.user_id, body]
+        [threadId, user.user_id, body],
     );
 
     // Update the thread's last activity date
     await query(
         `UPDATE threads SET date = CURRENT_TIMESTAMP
         WHERE thread_id = $1`,
-        [threadId]
+        [threadId],
     );
 
     // Revalidate the thread page to show the new post
@@ -56,7 +56,7 @@ export async function deletePost(formData: FormData) {
     // Check if user is admin or post author
     const postResult = await query(
         `SELECT author_id FROM posts WHERE post_id = $1`,
-        [postId]
+        [postId],
     );
 
     if (postResult.rows.length === 0) {
@@ -96,13 +96,13 @@ export async function likePost(formData: FormData) {
         VALUES ($1, $2, $3)
         ON CONFLICT (user_id, post_id)
         DO UPDATE SET like_dislike = $3`,
-        [user.user_id, postId, value]
+        [user.user_id, postId, value],
     );
 
     // Get thread_id for revalidation
     const postResult = await query(
         `SELECT thread_id FROM posts WHERE post_id = $1`,
-        [postId]
+        [postId],
     );
 
     if (postResult.rows.length > 0) {
@@ -119,15 +119,15 @@ export async function removeLike(formData: FormData) {
 
     const postId = parseInt(formData.get("postId") as string);
 
-    await query(
-        `DELETE FROM likes WHERE user_id = $1 AND post_id = $2`,
-        [user.user_id, postId]
-    );
+    await query(`DELETE FROM likes WHERE user_id = $1 AND post_id = $2`, [
+        user.user_id,
+        postId,
+    ]);
 
     // Get thread_id for revalidation
     const postResult = await query(
         `SELECT thread_id FROM posts WHERE post_id = $1`,
-        [postId]
+        [postId],
     );
 
     if (postResult.rows.length > 0) {
