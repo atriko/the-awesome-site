@@ -3,16 +3,21 @@ import { PostForm } from "@/components/PostForm";
 import { LikeButton } from "@/components/LikeButton";
 import { notFound } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
-import type { ThreadWithAuthor, PostWithDetails } from "@/types/database";
 
 interface PageProps {
-    params: {
+    params: Promise<{
         id: string;
-    };
+    }>;
 }
 
 export default async function ThreadPage({ params }: PageProps) {
-    const threadId = parseInt(params.id);
+    const resolvedParams = await params;
+    const threadId = parseInt(resolvedParams.id);
+
+    if (isNaN(threadId)) {
+        notFound();
+    }
+
     const user = await getCurrentUser();
 
     // Fetch thread
@@ -28,7 +33,7 @@ export default async function ThreadPage({ params }: PageProps) {
         notFound();
     }
 
-    const thread = threadResult.rows[0] as ThreadWithAuthor;
+    const thread = threadResult.rows[0];
 
     // Fetch posts
     const postsResult = await query(
@@ -47,11 +52,10 @@ export default async function ThreadPage({ params }: PageProps) {
                                     [threadId, user?.user_id || null]
     );
 
-    const posts = postsResult.rows as PostWithDetails[];
+    const posts = postsResult.rows;
 
     return (
         <div>
-        {/* Same JSX as above, but with typed variables */}
         <div className="thread-header">
         <h1>{thread.title}</h1>
         <div className="thread-meta">
@@ -60,7 +64,7 @@ export default async function ThreadPage({ params }: PageProps) {
         </div>
 
         <div className="posts-list">
-        {posts.map((post) => (
+        {posts.map((post: any) => (
             <div key={post.post_id} className="post-item">
             <div className="post-header">
             <div className="post-author">{post.username}</div>
@@ -70,7 +74,7 @@ export default async function ThreadPage({ params }: PageProps) {
             </div>
 
             <div className="post-body">
-            {post.body.split('\n').map((line, i) => (
+            {post.body.split('\n').map((line: string, i: number) => (
                 <p key={i}>{line}</p>
             ))}
             </div>
@@ -78,8 +82,8 @@ export default async function ThreadPage({ params }: PageProps) {
             <div className="post-footer">
             <LikeButton
             postId={post.post_id}
-            initialLikes={parseInt(post.like_count)}
-            initialDislikes={parseInt(post.dislike_count)}
+            initialLikes={parseInt(post.like_count || "0")}
+            initialDislikes={parseInt(post.dislike_count || "0")}
             initialUserLike={post.user_like}
             />
             </div>
