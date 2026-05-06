@@ -1,19 +1,25 @@
 // next.config.ts
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-    // ... your existing config (like reactCompiler: true, etc.)
+    reactCompiler: true,
 
     images: {
         remotePatterns: [
             {
-                protocol: "https",
-                hostname: "api.dicebear.com",
-                port: "",
-                pathname: "/7.x/**", // Allows all paths under /7.x/
+                protocol: 'https',
+                hostname: 'api.dicebear.com',
+                port: '',
+                pathname: '/7.x/**',
             },
         ],
     },
+
+    // Fix for reverse proxy Server Actions
+    allowedDevOrigins: ['awesome.atriko.dev', '45.76.57.246'],
+
+    // Also add this to handle proxy headers
+    skipTrailingSlashRedirect: true,
 };
 
 export default nextConfig;
