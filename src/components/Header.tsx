@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { getCurrentUser } from "@/lib/auth";
-import { logout } from "@/actions/auth";
 import { logoutAction } from "@/actions/auth";
 import styles from "./Header.module.scss";
 
