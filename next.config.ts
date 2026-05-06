@@ -15,11 +15,20 @@ const nextConfig: NextConfig = {
         ],
     },
 
-    // Fix for reverse proxy Server Actions
-    allowedDevOrigins: ['awesome.atriko.dev', '45.76.57.246'],
+    // Critical fix for Server Actions behind reverse proxy
+    serverExternalPackages: [],
 
-    // Also add this to handle proxy headers
-    skipTrailingSlashRedirect: true,
+    // Allow all hosts in production (behind trusted proxy)
+    ...(process.env.NODE_ENV === 'production' && {
+        allowedDevOrigins: ['*'],
+    }),
+
+    // Disable strict host checking for trusted proxy
+    experimental: {
+        serverActions: {
+            allowedOrigins: ['awesome.atriko.dev', '*.atriko.dev', '45.76.57.246'],
+        },
+    },
 };
 
 export default nextConfig;
