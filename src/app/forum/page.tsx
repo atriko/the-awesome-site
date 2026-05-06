@@ -4,7 +4,7 @@ import styles from "./page.module.scss";
 
 interface Thread {
     thread_id: number;
-    author_id: number;  // ← ADD THIS
+    author_id: number; // ← ADD THIS
     title: string;
     date: Date;
     username: string;
@@ -32,64 +32,64 @@ export default async function ForumPage() {
 
     return (
         <div>
-        <div className={styles.forumHeader}>
-        <h1>Forum Threads</h1>
-        <Link
-        href="/forum/new-thread"
-        className={styles.newThreadButton}
-        >
-        + Create New Thread
-        </Link>
-        </div>
-
-        <div className={styles.threadList}>
-        {threads.length === 0 ? (
-            <div className={styles.emptyState}>
-            <p>
-            ✨ No threads yet. Be the first to start a
-            discussion!
-            </p>
-            <Link
-            href="/forum/new-thread"
-            className={styles.newThreadButton}
-            >
-            Create First Thread
-            </Link>
-            </div>
-        ) : (
-            threads.map((thread) => (
-                <div
-                key={thread.thread_id}
-                className={styles.threadCard}
-                >
-                <div className={styles.threadTitle}>
+            <div className={styles.forumHeader}>
+                <h1>Forum Threads</h1>
                 <Link
-                href={`/forum/thread/${thread.thread_id}`}
+                    href="/forum/new-thread"
+                    className={styles.newThreadButton}
                 >
-                {thread.title}
+                    + Create New Thread
                 </Link>
-                </div>
-                <div className={styles.threadMeta}>
-                <span>
-                👤 by{" "}
-                <Link href={`/user/${thread.author_id}`}>
-                {thread.username}
-                </Link>
-                </span>
-                <span>
-                📅{" "}
-                {new Date(thread.date).toLocaleDateString()}
-                </span>
-                </div>
-                <div className={styles.threadStats}>
-                <span>
-                💬 {parseInt(thread.post_count)} replies
-                </span>
-                </div>
-                </div>
-            ))
-        )}
-        </div>
+            </div>
+
+            <div className={styles.threadList}>
+                {threads.length === 0 ? (
+                    <div className={styles.emptyState}>
+                        <p>
+                            ✨ No threads yet. Be the first to start a
+                            discussion!
+                        </p>
+                        <Link
+                            href="/forum/new-thread"
+                            className={styles.newThreadButton}
+                        >
+                            Create First Thread
+                        </Link>
+                    </div>
+                ) : (
+                    threads.map((thread) => (
+                        <div
+                            key={thread.thread_id}
+                            className={styles.threadCard}
+                        >
+                            <div className={styles.threadTitle}>
+                                <Link
+                                    href={`/forum/thread/${thread.thread_id}`}
+                                >
+                                    {thread.title}
+                                </Link>
+                            </div>
+                            <div className={styles.threadMeta}>
+                                <span>
+                                    👤 by{" "}
+                                    <Link href={`/user/${thread.author_id}`}>
+                                        {thread.username}
+                                    </Link>
+                                </span>
+                                <span>
+                                    📅{" "}
+                                    {new Date(thread.date).toLocaleDateString()}
+                                </span>
+                            </div>
+                            <div className={styles.threadStats}>
+                                <span>
+                                    💬 {parseInt(thread.post_count)} replies
+                                </span>
+                            </div>
+                        </div>
+                    ))
+                )}
+            </div>
         </div>
     );
 }

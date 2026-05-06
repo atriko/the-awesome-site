@@ -3,7 +3,7 @@ import { requireAuth } from "@/lib/auth";
 import Link from "next/link";
 import styles from "./page.module.scss";
 
-// Separate types for received and sent messages
+// Types for messages
 interface ReceivedMessage {
     message_id: number;
     author_id: number;
@@ -23,7 +23,6 @@ interface SentMessage {
 }
 
 export default async function MessagesPage() {
-    // Require authentication
     const user = await requireAuth();
 
     // Fetch received messages (inbox)
@@ -65,191 +64,184 @@ export default async function MessagesPage() {
 
     return (
         <div className={styles.container}>
-        <div className={styles.header}>
-        <h1 className={styles.title}>Private Messages</h1>
-        <Link href="/messages/new" className={styles.newButton}>
-        + New Message
-        </Link>
-        </div>
-
-        <div className={styles.messageGrid}>
-        {/* Inbox Section */}
-        <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>Inbox</h2>
-
-        {receivedMessages.length === 0 ? (
-            <div className={styles.emptyState}>
-            <p>No messages yet.</p>
-            <Link
-            href="/messages/new"
-            className={styles.emptyLink}
-            >
-            Send your first message
-            </Link>
-            </div>
-        ) : (
-            <ul className={styles.messageList}>
-            {receivedMessages.map((message) => (
-                <li
-                key={message.message_id}
-                className={styles.messageItem}
-                >
-                <Link
-                href={`/messages/${message.message_id}`}
-                className={styles.messageLink}
-                >
-                <div className={styles.messageAvatar}>
-                {message.author_avatar ? (
-                    <img
-                    src={message.author_avatar}
-                    alt={
-                        message.author_username
-                    }
-                    className={styles.avatar}
-                    />
-                ) : (
-                    <div
-                    className={
-                        styles.avatarPlaceholder
-                    }
-                    >
-                    {message.author_username
-                        .charAt(0)
-                        .toUpperCase()}
-                        </div>
-                )}
-                </div>
-
-                <div className={styles.messageContent}>
-                <div
-                className={styles.messageHeader}
-                >
-                <Link
-                href={`/user/${message.author_id}`}
-                className={styles.senderName}
-                >
-                {message.author_username}
+            <div className={styles.header}>
+                <h1 className={styles.title}>Private Messages</h1>
+                <Link href="/messages/new" className={styles.newButton}>
+                    + New Message
                 </Link>
-                <span
-                className={
-                    styles.messageDate
-                }
-                >
-                {new Date(
-                    message.date,
-                ).toLocaleDateString()}
-                </span>
-                </div>
-                <div
-                className={
-                    styles.messagePreview
-                }
-                >
-                {message.body.length > 100
-                    ? message.body.substring(
-                        0,
-                        100,
-                    ) + "..."
-                    : message.body}
-                    </div>
-                    </div>
-                    </Link>
-                    </li>
-            ))}
-            </ul>
-        )}
-        </div>
-
-        {/* Sent Section */}
-        <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>Sent</h2>
-
-        {sentMessages.length === 0 ? (
-            <div className={styles.emptyState}>
-            <p>No sent messages.</p>
             </div>
-        ) : (
-            <ul className={styles.messageList}>
-            {sentMessages.map((message) => (
-                <li
-                key={message.message_id}
-                className={styles.messageItem}
-                >
-                <Link
-                href={`/messages/${message.message_id}`}
-                className={styles.messageLink}
-                >
-                <div className={styles.messageAvatar}>
-                {message.recipient_avatar ? (
-                    <img
-                    src={
-                        message.recipient_avatar
-                    }
-                    alt={
-                        message.recipient_username
-                    }
-                    className={styles.avatar}
-                    />
-                ) : (
-                    <div
-                    className={
-                        styles.avatarPlaceholder
-                    }
-                    >
-                    {message.recipient_username
-                        .charAt(0)
-                        .toUpperCase()}
-                        </div>
-                )}
-                </div>
 
-                <div className={styles.messageContent}>
-                <div
-                className={styles.messageHeader}
-                >
-                <span
-                className={
-                    styles.senderName
-                }
-                >
-                To:{" "}
-                <Link
-                href={`/user/${message.recipient_id}`}
-                className={styles.recipientLink}
-                >
-                {message.recipient_username}
-                </Link>
-                </span>
-                <span
-                className={
-                    styles.messageDate
-                }
-                >
-                {new Date(
-                    message.date,
-                ).toLocaleDateString()}
-                </span>
-                </div>
-                <div
-                className={
-                    styles.messagePreview
-                }
-                >
-                {message.body.length > 100
-                    ? message.body.substring(
-                        0,
-                        100,
-                    ) + "..."
-                    : message.body}
+            {/* Inbox Section */}
+            <div className={styles.section}>
+                <h2 className={styles.sectionTitle}>
+                    Inbox ({receivedMessages.length})
+                </h2>
+
+                {receivedMessages.length === 0 ? (
+                    <div className={styles.emptyState}>
+                        <p>No messages received yet.</p>
                     </div>
+                ) : (
+                    <ul className={styles.messageList}>
+                        {receivedMessages.map((message) => (
+                            <li
+                                key={message.message_id}
+                                className={styles.messageItem}
+                            >
+                                <div className={styles.messageContent}>
+                                    <div className={styles.messageAvatar}>
+                                        {message.author_avatar ? (
+                                            <img
+                                                src={message.author_avatar}
+                                                alt={message.author_username}
+                                                className={styles.avatar}
+                                            />
+                                        ) : (
+                                            <div
+                                                className={
+                                                    styles.avatarPlaceholder
+                                                }
+                                            >
+                                                {message.author_username
+                                                    .charAt(0)
+                                                    .toUpperCase()}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className={styles.messageDetails}>
+                                        <div className={styles.messageHeader}>
+                                            <Link
+                                                href={`/user/${message.author_id}`}
+                                                className={styles.senderName}
+                                            >
+                                                {message.author_username}
+                                            </Link>
+                                            <Link
+                                                href={`/messages/${message.message_id}`}
+                                                className={styles.messageLink}
+                                            >
+                                                <span
+                                                    className={
+                                                        styles.messageDate
+                                                    }
+                                                >
+                                                    {new Date(
+                                                        message.date,
+                                                    ).toLocaleDateString()}
+                                                </span>
+                                            </Link>
+                                        </div>
+                                        <Link
+                                            href={`/messages/${message.message_id}`}
+                                            className={styles.messageLink}
+                                        >
+                                            <div
+                                                className={
+                                                    styles.messagePreview
+                                                }
+                                            >
+                                                {message.body.length > 100
+                                                    ? message.body.substring(
+                                                          0,
+                                                          100,
+                                                      ) + "..."
+                                                    : message.body}
+                                            </div>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
+
+            {/* Sent Section */}
+            <div className={styles.section}>
+                <h2 className={styles.sectionTitle}>
+                    Sent ({sentMessages.length})
+                </h2>
+
+                {sentMessages.length === 0 ? (
+                    <div className={styles.emptyState}>
+                        <p>No sent messages yet.</p>
                     </div>
-                    </Link>
-                    </li>
-            ))}
-            </ul>
-        )}
-        </div>
-        </div>
+                ) : (
+                    <ul className={styles.messageList}>
+                        {sentMessages.map((message) => (
+                            <li
+                                key={message.message_id}
+                                className={styles.messageItem}
+                            >
+                                <div className={styles.messageContent}>
+                                    <div className={styles.messageAvatar}>
+                                        {message.recipient_avatar ? (
+                                            <img
+                                                src={message.recipient_avatar}
+                                                alt={message.recipient_username}
+                                                className={styles.avatar}
+                                            />
+                                        ) : (
+                                            <div
+                                                className={
+                                                    styles.avatarPlaceholder
+                                                }
+                                            >
+                                                {message.recipient_username
+                                                    .charAt(0)
+                                                    .toUpperCase()}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className={styles.messageDetails}>
+                                        <div className={styles.messageHeader}>
+                                            <span className={styles.senderName}>
+                                                To:{" "}
+                                                <Link
+                                                    href={`/user/${message.recipient_id}`}
+                                                >
+                                                    {message.recipient_username}
+                                                </Link>
+                                            </span>
+                                            <Link
+                                                href={`/messages/${message.message_id}`}
+                                                className={styles.messageLink}
+                                            >
+                                                <span
+                                                    className={
+                                                        styles.messageDate
+                                                    }
+                                                >
+                                                    {new Date(
+                                                        message.date,
+                                                    ).toLocaleDateString()}
+                                                </span>
+                                            </Link>
+                                        </div>
+                                        <Link
+                                            href={`/messages/${message.message_id}`}
+                                            className={styles.messageLink}
+                                        >
+                                            <div
+                                                className={
+                                                    styles.messagePreview
+                                                }
+                                            >
+                                                {message.body.length > 100
+                                                    ? message.body.substring(
+                                                          0,
+                                                          100,
+                                                      ) + "..."
+                                                    : message.body}
+                                            </div>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </div>
         </div>
     );
 }

@@ -1,0 +1,144 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+}
+
+.backButton {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-size: 0.875rem;
+
+    &:hover {
+        border-color: var(--color-primary);
+        color: var(--color-primary);
+    }
+}
+
+.replyButton {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+
+    &:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+    }
+}
+
+.messageCard {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.messageHeader {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    background-color: var(--bg-tertiary);
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.avatar {
+    flex-shrink: 0;
+}
+
+.avatarImage {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.avatarPlaceholder {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: white;
+}
+
+.userDetails {
+    flex: 1;
+}
+
+.username {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-decoration: none;
+
+    &:hover {
+        color: var(--color-secondary);
+        text-decoration: underline;
+    }
+}
+
+.date {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+}
+
+.messageBody {
+    padding: 1.5rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+
+    p {
+        margin: 0 0 1rem 0;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .messageHeader {
+        padding: 1rem;
+    }
+
+    .messageBody {
+        padding: 1rem;
+    }
+
+    .avatarImage,
+    .avatarPlaceholder {
+        width: 40px;
+        height: 40px;
+    }
+}

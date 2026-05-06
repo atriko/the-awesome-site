@@ -3,7 +3,7 @@ import { PostForm } from "@/components/PostForm";
 import { LikeButton } from "@/components/LikeButton";
 import { notFound } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
-import Link from "next/link";  // ← ADD THIS IMPORT
+import Link from "next/link"; // ← ADD THIS IMPORT
 import styles from "./page.module.scss";
 
 interface PageProps {
@@ -71,65 +71,73 @@ export default async function ThreadPage({ params }: PageProps) {
                                     WHERE p.thread_id = $1
                                     GROUP BY p.post_id, u.username
                                     ORDER BY p.date ASC`,
-                                    [threadId, user?.user_id || null],
+        [threadId, user?.user_id || null],
     );
 
     const posts = postsResult.rows as PostWithDetails[];
 
     return (
         <div>
-        {/* Thread Header */}
-        <div className={styles.threadHeader}>
-        <h1 className={styles.threadTitle}>{thread.title}</h1>
-        <div className={styles.threadMeta}>
-        <span>👤 Started by <Link href={`/user/${thread.author_id}`}>{thread.username}</Link></span>
-        <span>📅 {new Date(thread.date).toLocaleDateString()}</span>
-        <span>💬 {posts.length} replies</span>
-        </div>
-        </div>
-
-        {/* Posts List */}
-        <div className={styles.postsList}>
-        {posts.map((post) => (
-            <div key={post.post_id} className={styles.postItem}>
-            <div className={styles.postHeader}>
-            <Link href={`/user/${post.author_id}`} className={styles.postAuthor}>
-            {post.username}
-            </Link>
-            <div className={styles.postDate}>
-            {new Date(post.date).toLocaleString()}
-            </div>
+            {/* Thread Header */}
+            <div className={styles.threadHeader}>
+                <h1 className={styles.threadTitle}>{thread.title}</h1>
+                <div className={styles.threadMeta}>
+                    <span>
+                        👤 Started by{" "}
+                        <Link href={`/user/${thread.author_id}`}>
+                            {thread.username}
+                        </Link>
+                    </span>
+                    <span>📅 {new Date(thread.date).toLocaleDateString()}</span>
+                    <span>💬 {posts.length} replies</span>
+                </div>
             </div>
 
-            <div className={styles.postBody}>
-            {post.body
-                .split("\n")
-                .map((line: string, i: number) => (
-                    <p key={i}>{line}</p>
+            {/* Posts List */}
+            <div className={styles.postsList}>
+                {posts.map((post) => (
+                    <div key={post.post_id} className={styles.postItem}>
+                        <div className={styles.postHeader}>
+                            <Link
+                                href={`/user/${post.author_id}`}
+                                className={styles.postAuthor}
+                            >
+                                {post.username}
+                            </Link>
+                            <div className={styles.postDate}>
+                                {new Date(post.date).toLocaleString()}
+                            </div>
+                        </div>
+
+                        <div className={styles.postBody}>
+                            {post.body
+                                .split("\n")
+                                .map((line: string, i: number) => (
+                                    <p key={i}>{line}</p>
+                                ))}
+                        </div>
+
+                        <div className={styles.postFooter}>
+                            <LikeButton
+                                postId={post.post_id}
+                                initialLikes={parseInt(post.like_count || "0")}
+                                initialDislikes={parseInt(
+                                    post.dislike_count || "0",
+                                )}
+                                initialUserLike={post.user_like}
+                            />
+                        </div>
+                    </div>
                 ))}
-                </div>
+            </div>
 
-                <div className={styles.postFooter}>
-                <LikeButton
-                postId={post.post_id}
-                initialLikes={parseInt(post.like_count || "0")}
-                initialDislikes={parseInt(
-                    post.dislike_count || "0",
-                )}
-                initialUserLike={post.user_like}
-                />
+            {/* Reply Section */}
+            <div className={styles.replySection}>
+                <h2>Post a Reply</h2>
+                <div className={styles.replyForm}>
+                    <PostForm threadId={threadId} />
                 </div>
-                </div>
-        ))}
-        </div>
-
-        {/* Reply Section */}
-        <div className={styles.replySection}>
-        <h2>Post a Reply</h2>
-        <div className={styles.replyForm}>
-        <PostForm threadId={threadId} />
-        </div>
-        </div>
+            </div>
         </div>
     );
 }

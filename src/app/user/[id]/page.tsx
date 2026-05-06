@@ -108,7 +108,6 @@ export default async function UserPage({ params }: PageProps) {
     const recentThreads = threadsResult.rows as Thread[];
     const recentPosts = postsResult.rows as Post[];
 
-    // Truncate function for post preview
     const truncate = (text: string, maxLength: number) => {
         if (text.length <= maxLength) return text;
         return text.substring(0, maxLength) + "...";
@@ -175,10 +174,22 @@ export default async function UserPage({ params }: PageProps) {
                             📧 {profileUser.email}
                         </div>
                     )}
+
+                    {/* Send Message Button - Only show if not own profile and user is logged in */}
+                    {!isOwnProfile && currentUser && (
+                        <div className={styles.messageButtonContainer}>
+                            <Link
+                                href={`/messages/new?to=${profileUser.user_id}`}
+                                className={styles.messageButton}
+                            >
+                                💬 Send Message
+                            </Link>
+                        </div>
+                    )}
                 </div>
             </div>
 
-            {/* Bio Section */}
+            {/* Rest of your component remains the same */}
             {profileUser.bio && (
                 <div className={styles.section}>
                     <h2>About</h2>
@@ -188,7 +199,6 @@ export default async function UserPage({ params }: PageProps) {
                 </div>
             )}
 
-            {/* Signature Section */}
             {profileUser.signature && (
                 <div className={styles.section}>
                     <h2>Signature</h2>
@@ -198,9 +208,7 @@ export default async function UserPage({ params }: PageProps) {
                 </div>
             )}
 
-            {/* Activity Section */}
             <div className={styles.activityGrid}>
-                {/* Recent Threads */}
                 <div className={styles.section}>
                     <h2>Recent Threads</h2>
                     {recentThreads.length === 0 ? (
@@ -231,7 +239,6 @@ export default async function UserPage({ params }: PageProps) {
                     )}
                 </div>
 
-                {/* Recent Posts */}
                 <div className={styles.section}>
                     <h2>Recent Posts</h2>
                     {recentPosts.length === 0 ? (

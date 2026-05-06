@@ -224,3 +224,27 @@
     text-align: center;
     padding: 1rem;
 }
+
+.messageButtonContainer {
+    margin-top: 1rem;
+}
+
+.messageButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+
+    &:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+        color: white;
+    }
+}
