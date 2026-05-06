@@ -5,7 +5,6 @@ import { getCurrentUser } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-// Create a new thread with its first post
 export async function createThread(formData: FormData) {
     const user = await getCurrentUser();
 
@@ -33,33 +32,28 @@ export async function createThread(formData: FormData) {
         throw new Error("Post is too long (max 10,000 characters)");
     }
 
-    try {
-        // Insert the thread
-        const threadResult = await query(
-            `INSERT INTO threads (author_id, title, date)
-            VALUES ($1, $2, CURRENT_TIMESTAMP)
-            RETURNING thread_id`,
-            [user.user_id, title.trim()],
-        );
+    // Insert the thread
+    const threadResult = await query(
+        `INSERT INTO threads (author_id, title, date)
+        VALUES ($1, $2, CURRENT_TIMESTAMP)
+        RETURNING thread_id`,
+        [user.user_id, title.trim()]
+    );
 
-        const threadId = threadResult.rows[0].thread_id;
+    const threadId = threadResult.rows[0].thread_id;
 
-        // Insert the first post
-        await query(
-            `INSERT INTO posts (thread_id, author_id, body, date)
-            VALUES ($1, $2, $3, CURRENT_TIMESTAMP)`,
-            [threadId, user.user_id, body.trim()],
-        );
+    // Insert the first post
+    await query(
+        `INSERT INTO posts (thread_id, author_id, body, date)
+        VALUES ($1, $2, $3, CURRENT_TIMESTAMP)`,
+                [threadId, user.user_id, body.trim()]
+    );
 
-        // Revalidate the forum page to show the new thread
-        revalidatePath("/forum");
+    // Revalidate the forum page
+    revalidatePath("/forum");
 
-        // Redirect to the new thread
-        redirect(`/forum/thread/${threadId}`);
-    } catch (error) {
-        console.error("Failed to create thread:", error);
-        throw new Error("Failed to create thread. Please try again.");
-    }
+    // DO NOT wrap redirect in try-catch - it's supposed to throw!
+    redirect(`/forum/thread/${threadId}`);
 }
 
 // Delete a thread (admin only or thread author)

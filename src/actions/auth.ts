@@ -7,34 +7,38 @@ export async function loginAction(formData: FormData) {
     const username = formData.get("username") as string;
     const password = formData.get("password") as string;
 
-    try {
-        const user = await login(username, password);
+    const user = await login(username, password);
 
-        if (!user) {
-            throw new Error("Invalid username or password");
-        }
-
-        redirect("/forum");
-    } catch (error) {
-        // You'll need client-side error handling for this
-        throw new Error("Login failed: " + (error as Error).message);
+    if (!user) {
+        throw new Error("Invalid username or password");
     }
+
+    // Do NOT wrap redirect in try/catch
+    redirect("/forum");
 }
 
 export async function registerAction(formData: FormData) {
     const username = formData.get("username") as string;
     const password = formData.get("password") as string;
-    const email = formData.get("email") as string;
-    const name = formData.get("name") as string;
+    const email = formData.get("email") as string || undefined;
+    const name = formData.get("name") as string || undefined;
 
-    try {
-        await register(username, password, email, name);
-        redirect("/forum");
-    } catch (error) {
-        throw new Error("Registration failed: " + (error as Error).message);
+    // Validate required fields
+    if (!username || username.length < 3) {
+        throw new Error("Username must be at least 3 characters");
     }
+
+    if (!password || password.length < 6) {
+        throw new Error("Password must be at least 6 characters");
+    }
+
+    await register(username, password, email, name);
+
+    // Do NOT wrap redirect in try/catch
+    redirect("/forum");
 }
 
 export async function logoutAction() {
     await logout();
+    // logout() already calls redirect("/")
 }

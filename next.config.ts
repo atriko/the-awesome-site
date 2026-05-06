@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
     reactCompiler: true,
 
     images: {
+        dangerouslyAllowSVG: true,
         remotePatterns: [
             {
                 protocol: 'https',
