@@ -55,9 +55,14 @@
 }
 
 .postAuthor {
-    font-weight: bold;
     color: var(--color-primary);
-    font-size: 1rem;
+    text-decoration: none;
+    font-weight: 600;
+
+    &:hover {
+        color: var(--color-secondary);
+        text-decoration: underline;
+    }
 }
 
 .postDate {

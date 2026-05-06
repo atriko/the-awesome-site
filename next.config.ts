@@ -1,5 +1,5 @@
 // next.config.ts
-import type { NextConfig } from 'next';
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
     reactCompiler: true,
@@ -8,10 +8,10 @@ const nextConfig: NextConfig = {
         dangerouslyAllowSVG: true,
         remotePatterns: [
             {
-                protocol: 'https',
-                hostname: 'api.dicebear.com',
-                port: '',
-                pathname: '/7.x/**',
+                protocol: "https",
+                hostname: "api.dicebear.com",
+                port: "",
+                pathname: "/7.x/**",
             },
         ],
     },
@@ -20,14 +20,18 @@ const nextConfig: NextConfig = {
     serverExternalPackages: [],
 
     // Allow all hosts in production (behind trusted proxy)
-    ...(process.env.NODE_ENV === 'production' && {
-        allowedDevOrigins: ['*'],
+    ...(process.env.NODE_ENV === "production" && {
+        allowedDevOrigins: ["*"],
     }),
 
     // Disable strict host checking for trusted proxy
     experimental: {
         serverActions: {
-            allowedOrigins: ['awesome.atriko.dev', '*.atriko.dev', '45.76.57.246'],
+            allowedOrigins: [
+                "awesome.atriko.dev",
+                "*.atriko.dev",
+                "45.76.57.246",
+            ],
         },
     },
 };

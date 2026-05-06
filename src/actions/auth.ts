@@ -20,8 +20,8 @@ export async function loginAction(formData: FormData) {
 export async function registerAction(formData: FormData) {
     const username = formData.get("username") as string;
     const password = formData.get("password") as string;
-    const email = formData.get("email") as string || undefined;
-    const name = formData.get("name") as string || undefined;
+    const email = (formData.get("email") as string) || undefined;
+    const name = (formData.get("name") as string) || undefined;
 
     // Validate required fields
     if (!username || username.length < 3) {

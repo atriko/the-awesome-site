@@ -37,7 +37,7 @@ export async function createThread(formData: FormData) {
         `INSERT INTO threads (author_id, title, date)
         VALUES ($1, $2, CURRENT_TIMESTAMP)
         RETURNING thread_id`,
-        [user.user_id, title.trim()]
+        [user.user_id, title.trim()],
     );
 
     const threadId = threadResult.rows[0].thread_id;
@@ -46,7 +46,7 @@ export async function createThread(formData: FormData) {
     await query(
         `INSERT INTO posts (thread_id, author_id, body, date)
         VALUES ($1, $2, $3, CURRENT_TIMESTAMP)`,
-                [threadId, user.user_id, body.trim()]
+        [threadId, user.user_id, body.trim()],
     );
 
     // Revalidate the forum page
